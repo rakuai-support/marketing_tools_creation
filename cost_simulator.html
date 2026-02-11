@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>かわさき楽AIサポート - コスト削減シミュレーター</title>
+    <style>
+        :root {
+            --primary-color: #ff8c00;
+            /* Warm orange */
+            --secondary-color: #fffaf0;
+            /* Light cream */
+            --accent-color: #e67e22;
+            --text-color: #333;
+            --border-radius: 12px;
+            --font-family: 'Helvetica Neue', Arial, sans-serif;
+            --frontale-blue: #00a0e9;
+            /* Frontale Blue-ish */
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: #f9f9f9;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .description {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            color: #666;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .btn-calculate {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-calculate:hover {
+            background-color: var(--accent-color);
+        }
+
+        .result-box {
+            margin-top: 25px;
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            display: none;
+            border: 1px solid #ffe4b5;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .result-item.total {
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .coun-up {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Reward Section */
+        .rewards-container {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px dashed #ffcc80;
+        }
+
+        .rewards-title {
+            text-align: center;
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .reward-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .reward-card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .reward-card:hover {
+            transform: scale(1.05);
+        }
+
+        .reward-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .reward-text {
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .reward-count {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .reward-card.frontale {
+            border: 2px solid var(--frontale-blue);
+            background-color: #f0f8ff;
+        }
+
+        .reward-card.frontale .reward-count {
+            color: var(--frontale-blue);
+        }
+
+        /* CTA */
+        .cta-section {
+            margin-top: 25px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease-out 0.3s backwards;
+        }
+
+        .cta-text {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .btn-contact {
+            display: inline-block;
+            background-color: #333;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-contact:hover {
+            background-color: #555;
+            transform: translateY(-2px);
+        }
+
+        .note {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        @media (max-width: 480px) {
+            .reward-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>AIコスト削減シミュレーター</h1>
+        <p class="description">
+            今の業務にAIを取り入れたら、どれくらい「時間」と「お金」が浮く？<br>
+            あなたの数字を入力してチェックしてみましょう！
+        </p>
+
+        <div class="input-group">
+            <label for="hours-per-day">1日あたりの事務作業・単純作業（分）</label>
+            <input type="number" id="hours-per-day" placeholder="例：60（1時間の場合）" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="hourly-wage">時給換算または従業員の時給（円）</label>
+            <input type="number" id="hourly-wage" value="1600" min="0">
+            <div style="font-size: 0.75rem; color: #888; margin-top: 2px;">※神奈川県平均時給目安（初期値）</div>
+        </div>
+
+        <div class="input-group">
+            <label for="days-per-month">月間稼働日数（日）</label>
+            <input type="number" id="days-per-month" value="20" min="0" max="31">
+        </div>
+
+        <button class="btn-calculate" onclick="calculateSavings()">診断する</button>
+
+        <div class="result-box" id="result-box">
+            <div class="result-item">
+                <span>削減できる時間（月間）:</span>
+                <span id="saved-hours-display">0時間 0分</span>
+            </div>
+            <div class="result-item">
+                <span>削減できるコスト（月間）:</span>
+                <span class="count-up" id="saved-cost">0</span> 円
+            </div>
+            <div class="result-item total">
+                <span>年間削減効果（見込み）:</span>
+                <span><span class="count-up" id="annual-savings">0</span> 円</span>
+            </div>
+
+            <div class="rewards-container">
+                <div class="rewards-title">年間で浮いたお金は…これくらい！</div>
+                <div class="reward-grid">
+                    <div class="reward-card">
+                        <div class="reward-icon">🍺</div>
+                        <div class="reward-text">生ビール</div>
+                        <div>約 <span class="reward-count" id="reward-beer">0</span> 杯分</div>
+                    </div>
+                    <div class="reward-card frontale">
+                        <div class="reward-icon">🐬⚽</div>
+                        <div class="reward-text">フロンターレ観戦</div>
+                        <div>約 <span class="reward-count" id="reward-frontale">0</span> 試合分</div>
+                    </div>
+                    <div class="reward-card">
+                        <div class="reward-icon">🍣</div>
+                        <div class="reward-text">高級寿司</div>
+                        <div>約 <span class="reward-count" id="reward-sushi">0</span> 回分</div>
+                    </div>
+                    <div class="reward-card">
+                        <div class="reward-icon">♨️</div>
+                        <div class="reward-text">温泉旅行</div>
+                        <div>約 <span class="reward-count" id="reward-onsen">0</span> 回分</div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="note">※AI活用により作業時間の約70%を削減できた場合の試算です。<br>※ご褒美は概算です（ビール600円、チケット4,000円、寿司2万円、温泉5万円で計算）。</p>
+        </div>
+
+        <div class="cta-section" id="cta-section">
+            <p class="cta-text">浮いた時間とコストで、<br>新しい楽しみやビジネスを始めませんか？</p>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="generatePDF()" class="btn-pdf"
+                    style="background-color: #555; color: white; padding: 12px 20px; border: none; border-radius: 30px; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">📑
+                    提案書をダウンロード</button>
+                <a href="https://www.smilefactory-rakuai.com/booking-calendar" target="_blank"
+                    class="btn-contact">無料相談で実現方法を聞く</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Serious Proposal Template (Hidden) -->
+    <div id="proposal-wrapper" style="position: absolute; top: 0; left: -9999px;">
+
+        <!-- Page 1 -->
+        <div id="proposal-template"
+            style="width: 700px; background-color: white; padding: 60px; box-sizing: border-box; font-family: 'Yu Mincho', 'Times New Roman', serif; color: #000; line-height: 1.6; margin-bottom: 20px;">
+            <!-- Header -->
+            <div
+                style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="font-size: 24px; font-weight: bold;">業務効率化およびコスト削減効果に関する試算報告書</div>
+                <br>
+                <div style="font-size: 12px;">作成日: <span id="prop-date"></span></div>
+            </div>
+
+            <!-- Introduction -->
+            <div style="margin-bottom: 30px;">
+                <p>本資料は、現状の事務作業・定型業務に対し、AIツール（「かわさき楽AIサポート」の支援により）を導入した場合の業務時間削減およびコスト削減効果をシミュレーションしたものです。</p>
+            </div>
+
+            <!-- Conditions -->
+            <div style="margin-bottom: 30px;">
+                <h3 style="font-size: 16px; border-left: 4px solid #ff8c00; padding-left: 10px; margin-bottom: 15px;">1.
+                    算出の前提条件</h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 8px; background-color: #f5f5f5; width: 40%;">
+                            対象業務の1日あたり所要時間</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;"><span id="prop-mins"></span> 分</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 8px; background-color: #f5f5f5;">月間稼働日数</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;"><span id="prop-days"></span> 日</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 8px; background-color: #f5f5f5;">人件費単価（時給換算）</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;"><span id="prop-wage"></span> 円</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Results -->
+            <div style="margin-bottom: 30px;">
+                <h3 style="font-size: 16px; border-left: 4px solid #ff8c00; padding-left: 10px; margin-bottom: 15px;">2.
+                    AI導入による削減効果（予測）</h3>
+                <p style="font-size: 14px; margin-bottom: 10px;">AIツールの導入により、当該業務の約70%を自動化・効率化できると仮定した場合の試算結果は以下の通りです。
+                </p>
+
+                <div style="background-color: #fffaf0; border: 1px solid #ffcc80; padding: 20px; border-radius: 8px;">
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 10px;">
+                        <strong>月間削減時間</strong>
+                        <span style="font-size: 18px; font-weight: bold;"><span id="prop-saved-hours"></span></span>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 10px;">
+                        <strong>月間コスト削減額</strong>
+                        <span style="font-size: 18px; font-weight: bold;"><span id="prop-saved-cost-monthly"></span>
+                            円</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                        <strong style="font-size: 16px; color: #d35400;">年間コスト削減額（見込み）</strong>
+                        <span style="font-size: 28px; font-weight: bold; color: #d35400;"><span
+                                id="prop-saved-cost-annual"></span> 円</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conclusion -->
+            <div style="margin-bottom: 40px;">
+                <h3 style="font-size: 16px; border-left: 4px solid #ff8c00; padding-left: 10px; margin-bottom: 15px;">3.
+                    結論</h3>
+                <p>上記の通り、AI導入により年間で <strong style="text-decoration: underline;"><span
+                            id="prop-conclusion-cost"></span>円</strong> 相当のコスト削減が見込まれます。<br>
+                    また、創出された時間をより付加価値の高い業務に充てることで、組織全体の生産性向上が期待できます。</p>
+            </div>
+
+            <!-- Footer -->
+            <div
+                style="margin-top: 50px; border-top: 1px solid #ccc; padding-top: 10px; text-align: center; font-size: 10px; color: #666;">
+                本シミュレーションは「かわさき楽AIサポート」の提供ツールにより作成されました。<br>
+                https://www.smilefactory-rakuai.com/
+            </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div id="proposal-page2"
+            style="width: 700px; background-color: white; padding: 60px; box-sizing: border-box; font-family: 'Yu Mincho', 'Times New Roman', serif; color: #000; line-height: 1.6;">
+            <!-- Header -->
+            <div
+                style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="font-size: 20px; font-weight: bold;">【参考】業種別 AI活用・コスト削減事例</div>
+            </div>
+
+            <div style="font-size: 14px; margin-bottom: 30px;">
+                <p>以下の事例は、「かわさき楽AIサポート」導入企業様等における一般的な削減効果のモデルケースです。</p>
+            </div>
+
+            <!-- Case 1: Restaurant -->
+            <div style="margin-bottom: 25px; border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px; color: #e67e22;">🍽️ 飲食業：予約管理・SNS発信の自動化</h4>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
+                            <li><strong>Before:</strong> 閉店後の予約台帳の整理、翌日の仕込みリスト作成、Instagram投稿に毎日60分。</li>
+                            <li><strong>After:</strong> AIが予約メールから自動で台帳入力。SNS文章も写真は投稿するだけで自動生成。作業時間15分へ短縮。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 10px; font-weight: bold; font-size: 14px; text-align: right; color: #d35400;">
+                    削減効果：月間 約22.5時間 / 年間 約40万円 相当
+                </div>
+            </div>
+
+            <!-- Case 2: Construction -->
+            <div style="margin-bottom: 25px; border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px; color: #2980b9;">👷 建設・現場：日報作成・写真整理</h4>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
+                            <li><strong>Before:</strong> 現場から戻ってから、スマホの写真をPCに移し、エクセル日報を作成（毎日45分）。</li>
+                            <li><strong>After:</strong> 現場でスマホに音声入力するだけで、写真付き日報が自動生成・送信される仕組みを導入。作業時間5分へ。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 10px; font-weight: bold; font-size: 14px; text-align: right; color: #2980b9;">
+                    削減効果：月間 約20時間 / 年間 約38万円 相当
+                </div>
+            </div>
+
+            <!-- Case 3: Office -->
+            <div style="margin-bottom: 25px; border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px; color: #27ae60;">💻 事務・総務：議事録・メール対応</h4>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
+                            <li><strong>Before:</strong> 会議の録音を聞き返して議事録作成（2時間）。問い合わせメールの返信文面作成（1件10分）。</li>
+                            <li><strong>After:</strong> AIがリアルタイムで文字起こし＆要約。メールも要点を打つだけで丁寧なビジネス文書を生成。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 10px; font-weight: bold; font-size: 14px; text-align: right; color: #27ae60;">
+                    削減効果：月間 約30時間 / 年間 約57万円 相当
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div
+                style="margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; text-align: center; font-size: 10px; color: #666;">
+                かわさき楽AIサポート - https://www.smilefactory-rakuai.com/
+            </div>
+        </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        function calculateSavings() {
+            // Inputs
+            const minutesPerDay = parseFloat(document.getElementById('hours-per-day').value);
+            const hourlyWage = parseFloat(document.getElementById('hourly-wage').value);
+            const daysPerMonth = parseFloat(document.getElementById('days-per-month').value);
+
+            if (isNaN(minutesPerDay) || isNaN(hourlyWage) || isNaN(daysPerMonth)) {
+                alert("すべての項目に数値を入力してください。");
+                return;
+            }
+
+            // Calculation Logic
+            const reductionRate = 0.7; // 70% reduction
+
+            const currentMonthlyMinutes = minutesPerDay * daysPerMonth;
+            const savedMonthlyMinutes = currentMonthlyMinutes * reductionRate;
+
+            const savedHours = Math.floor(savedMonthlyMinutes / 60);
+            const savedMinsRemainder = Math.round(savedMonthlyMinutes % 60);
+
+            const savedCostMonthly = Math.round((savedMonthlyMinutes / 60) * hourlyWage);
+            const savedCostAnnual = savedCostMonthly * 12;
+
+            // Reward Calculation
+            const priceBeer = 600;
+            const priceFrontale = 4000;
+            const priceSushi = 20000;
+            const priceOnsen = 50000;
+
+            const countBeer = Math.floor(savedCostAnnual / priceBeer);
+            const countFrontale = Math.floor(savedCostAnnual / priceFrontale);
+            const countSushi = Math.floor(savedCostAnnual / priceSushi);
+            const countOnsen = Math.floor(savedCostAnnual / priceOnsen);
+
+            // Display Logic
+            const resultBox = document.getElementById('result-box');
+            const ctaSection = document.getElementById('cta-section');
+
+            resultBox.style.display = 'block';
+            ctaSection.style.display = 'block';
+
+            // Set static text
+            document.getElementById('saved-hours-display').innerText = `${savedHours}時間 ${savedMinsRemainder}分`;
+
+            // Animate Numbers
+            animateValue("saved-cost", 0, savedCostMonthly, 1000);
+            animateValue("annual-savings", 0, savedCostAnnual, 1200);
+
+            animateValue("reward-beer", 0, countBeer, 1500);
+            animateValue("reward-frontale", 0, countFrontale, 1500);
+            animateValue("reward-sushi", 0, countSushi, 1500);
+            animateValue("reward-onsen", 0, countOnsen, 1500);
+
+            // Store values for PDF
+            window.simData = {
+                mins: minutesPerDay,
+                days: daysPerMonth,
+                wage: hourlyWage.toLocaleString(),
+                savedHoursText: `${savedHours}時間 ${savedMinsRemainder}分`,
+                savedCostMonthly: savedCostMonthly.toLocaleString(),
+                savedCostAnnual: savedCostAnnual.toLocaleString()
+            };
+        }
+
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            const range = end - start;
+            let current = start;
+            const increment = end > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / range));
+
+            if (range > 100 && stepTime < 10) {
+                let startTime = null;
+                function animation(currentTime) {
+                    if (!startTime) startTime = currentTime;
+                    const progress = currentTime - startTime;
+                    const pct = Math.min(progress / duration, 1);
+
+                    const val = Math.floor(start + (range * pct));
+                    obj.innerText = val.toLocaleString();
+
+                    if (progress < duration) {
+                        requestAnimationFrame(animation);
+                    } else {
+                        obj.innerText = end.toLocaleString();
+                    }
+                }
+                requestAnimationFrame(animation);
+            } else {
+                const timer = setInterval(function () {
+                    current += increment;
+                    obj.innerText = current.toLocaleString();
+                    if (current == end) {
+                        clearInterval(timer);
+                    }
+                }, stepTime);
+            }
+        }
+
+        async function generatePDF() {
+            if (!window.simData) {
+                alert("まずは「診断する」ボタンを押してください。");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+
+            // Populate Page 1 Template
+            const today = new Date();
+            document.getElementById('prop-date').innerText = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+            document.getElementById('prop-mins').innerText = window.simData.mins;
+            document.getElementById('prop-days').innerText = window.simData.days;
+            document.getElementById('prop-wage').innerText = window.simData.wage;
+            document.getElementById('prop-saved-hours').innerText = window.simData.savedHoursText;
+            document.getElementById('prop-saved-cost-monthly').innerText = window.simData.savedCostMonthly;
+            document.getElementById('prop-saved-cost-annual').innerText = window.simData.savedCostAnnual;
+            document.getElementById('prop-conclusion-cost').innerText = window.simData.savedCostAnnual;
+
+            const page1 = document.getElementById("proposal-template");
+            const page2 = document.getElementById("proposal-page2");
+
+            try {
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+
+                // --- Page 1 ---
+                const canvas1 = await html2canvas(page1, { scale: 2, backgroundColor: "#ffffff" });
+                const imgData1 = canvas1.toDataURL('image/png');
+                const imgProps1 = pdf.getImageProperties(imgData1);
+                const imgHeight1 = (imgProps1.height * pdfWidth) / imgProps1.width;
+
+                pdf.addImage(imgData1, 'PNG', 0, 0, pdfWidth, imgHeight1);
+
+                // --- Page 2 ---
+                pdf.addPage();
+                const canvas2 = await html2canvas(page2, { scale: 2, backgroundColor: "#ffffff" });
+                const imgData2 = canvas2.toDataURL('image/png');
+                const imgProps2 = pdf.getImageProperties(imgData2);
+                const imgHeight2 = (imgProps2.height * pdfWidth) / imgProps2.width;
+
+                pdf.addImage(imgData2, 'PNG', 0, 0, pdfWidth, imgHeight2);
+
+                pdf.save("AI導入効果試算報告書.pdf");
+
+            } catch (err) {
+                console.error(err);
+                alert("PDF生成に失敗しました。");
+            }
+        }
+    </script>
+
+</html>
