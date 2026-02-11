@@ -58,6 +58,199 @@
             margin-bottom: 15px;
         }
 
+        .container {
+            border-top: 6px solid var(--primary-color);
+            background: linear-gradient(180deg, #ffffff 0%, #fffdf8 100%);
+        }
+
+        .visual-lead {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff3e0;
+            border: 1px solid #ffd18d;
+            color: #9a5a00;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            padding: 5px 10px;
+            margin: 0 auto 12px;
+        }
+
+        .help-text {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .rate-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .rate-chip {
+            font-size: 0.78rem;
+            background: #ffe0b2;
+            color: #9a4f00;
+            border-radius: 999px;
+            padding: 2px 10px;
+            font-weight: bold;
+        }
+
+        .rate-meter {
+            width: 100%;
+            height: 8px;
+            background: #f1f1f1;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .rate-meter-fill {
+            height: 100%;
+            width: 70%;
+            background: linear-gradient(90deg, #ffc166 0%, #ff8c00 100%);
+            transition: width 0.25s ease, background 0.25s ease;
+        }
+
+        .error-box {
+            display: none;
+            margin: 12px 0;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #ffd5d5;
+            background: #fff3f3;
+            color: #b30000;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .error-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card {
+            background: white;
+            border: 1px solid #ffe0b2;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .kpi-label {
+            color: #666;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+        }
+
+        .kpi-value {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .impact-message {
+            margin: 0 0 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: #fff;
+            border: 1px solid #ffd8a3;
+            color: #a35a00;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .quick-scenario {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .scenario-btn {
+            border: 1px solid #ffd9a3;
+            background: #fff;
+            color: #8a4a00;
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+
+        .scenario-btn:hover {
+            background: #fff4e1;
+        }
+
+        .utility-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0 14px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-reset {
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.82rem;
+        }
+
+        .comparison-box {
+            margin-top: 14px;
+            border: 1px solid #f1e2c5;
+            border-radius: 10px;
+            background: #fff;
+            padding: 12px;
+        }
+
+        .comparison-title {
+            font-size: 0.84rem;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        .breakdown-box {
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #f1e2c5;
+            padding: 12px;
+            margin: 16px 0;
+        }
+
+        .breakdown-title {
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .breakdown-item {
+            font-size: 0.82rem;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
         label {
             display: block;
             margin-bottom: 5px;
@@ -242,6 +435,15 @@
         }
 
         @media (max-width: 480px) {
+            .utility-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
             .reward-grid {
                 grid-template-columns: 1fr;
             }
@@ -252,6 +454,7 @@
 <body>
 
     <div class="container">
+        <div class="visual-lead">⚡ 30秒で削減効果を見える化</div>
         <h1>AIコスト削減シミュレーター</h1>
         <p class="description">
             今の業務にAIを取り入れたら、どれくらい「時間」と「お金」が浮く？<br>
@@ -260,23 +463,67 @@
 
         <div class="input-group">
             <label for="hours-per-day">1日あたりの事務作業・単純作業（分）</label>
-            <input type="number" id="hours-per-day" placeholder="例：60（1時間の場合）" min="0">
+            <input type="number" id="hours-per-day" placeholder="例：60（1時間の場合）" min="1" max="1440" step="1"
+                onkeydown="submitOnEnter(event)">
+            <div class="help-text">目安: 10〜480分（最大24時間）</div>
         </div>
 
         <div class="input-group">
             <label for="hourly-wage">時給換算または従業員の時給（円）</label>
-            <input type="number" id="hourly-wage" value="1600" min="0">
-            <div style="font-size: 0.75rem; color: #888; margin-top: 2px;">※神奈川県平均時給目安（初期値）</div>
+            <input type="number" id="hourly-wage" value="1600" min="500" max="20000" step="1"
+                onkeydown="submitOnEnter(event)">
+            <div class="help-text">※神奈川県平均時給目安（初期値）/ 500〜20,000円で入力</div>
         </div>
 
         <div class="input-group">
             <label for="days-per-month">月間稼働日数（日）</label>
-            <input type="number" id="days-per-month" value="20" min="0" max="31">
+            <input type="number" id="days-per-month" value="20" min="1" max="31" step="1"
+                onkeydown="submitOnEnter(event)">
+            <div class="help-text">1〜31日で入力</div>
+        </div>
+
+        <div class="input-group">
+            <div class="rate-head">
+                <label for="reduction-rate">AIによる削減率（%）: <span id="reduction-rate-label">70</span>%</label>
+                <span class="rate-chip" id="reduction-rate-chip">標準</span>
+            </div>
+            <input type="range" id="reduction-rate" min="40" max="80" value="70" step="5"
+                oninput="updateReductionRateLabel()">
+            <div class="rate-meter"><div class="rate-meter-fill" id="rate-meter-fill"></div></div>
+            <div class="help-text">保守: 40% / 標準: 55% / 積極: 70% 目安</div>
+            <div class="quick-scenario">
+                <button type="button" class="scenario-btn" onclick="applyScenario(45)">保守 45%</button>
+                <button type="button" class="scenario-btn" onclick="applyScenario(55)">標準 55%</button>
+                <button type="button" class="scenario-btn" onclick="applyScenario(70)">積極 70%</button>
+            </div>
+        </div>
+
+        <div class="error-box" id="error-box" aria-live="polite"></div>
+
+        <div class="utility-row">
+            <small style="color:#777;">保存済みのURLを共有すれば同じ条件を再現できます。</small>
+            <button class="btn-reset" type="button" onclick="resetForm()">入力をリセット</button>
         </div>
 
         <button class="btn-calculate" onclick="calculateSavings()">診断する</button>
 
         <div class="result-box" id="result-box">
+            <p class="impact-message" id="impact-message">まずは条件を入力して診断してください。</p>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">月間削減時間</div>
+                    <div class="kpi-value" id="kpi-hours">0時間 0分</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">月間削減額</div>
+                    <div class="kpi-value"><span class="count-up" id="kpi-monthly">0</span> 円</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">年間削減額</div>
+                    <div class="kpi-value"><span class="count-up" id="kpi-annual">0</span> 円</div>
+                </div>
+            </div>
+
             <div class="result-item">
                 <span>削減できる時間（月間）:</span>
                 <span id="saved-hours-display">0時間 0分</span>
@@ -288,6 +535,19 @@
             <div class="result-item total">
                 <span>年間削減効果（見込み）:</span>
                 <span><span class="count-up" id="annual-savings">0</span> 円</span>
+            </div>
+
+            <div class="breakdown-box">
+                <div class="breakdown-title">計算の内訳</div>
+                <div class="breakdown-item" id="formula-current">月間作業分 = 0分 × 0日 = 0分</div>
+                <div class="breakdown-item" id="formula-saved">削減分 = 0分 × 70% = 0分</div>
+                <div class="breakdown-item" id="formula-cost">金額換算 = 0時間 × 0円 = 0円</div>
+            </div>
+
+            <div class="comparison-box">
+                <div class="comparison-title">シナリオ比較（70%固定との差分）</div>
+                <div class="comparison-item"><span>年間差分</span><span id="compare-annual">0 円</span></div>
+                <div class="comparison-item"><span>月間時間差分</span><span id="compare-hours">0時間 0分</span></div>
             </div>
 
             <div class="rewards-container">
@@ -316,7 +576,7 @@
                 </div>
             </div>
 
-            <p class="note">※AI活用により作業時間の約70%を削減できた場合の試算です。<br>※ご褒美は概算です（ビール600円、チケット4,000円、寿司2万円、温泉5万円で計算）。</p>
+            <p class="note">※AI活用により作業時間の<span id="note-reduction-rate">70</span>%を削減できた場合の試算です。<br>※ご褒美は概算です（ビール600円、チケット4,000円、寿司2万円、温泉5万円で計算）。</p>
         </div>
 
         <div class="cta-section" id="cta-section">
@@ -368,6 +628,10 @@
                         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f5f5f5;">人件費単価（時給換算）</td>
                         <td style="border: 1px solid #ccc; padding: 8px;"><span id="prop-wage"></span> 円</td>
                     </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 8px; background-color: #f5f5f5;">AI削減率</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;"><span id="prop-reduction-rate"></span> %</td>
+                    </tr>
                 </table>
             </div>
 
@@ -375,7 +639,7 @@
             <div style="margin-bottom: 30px;">
                 <h3 style="font-size: 16px; border-left: 4px solid #ff8c00; padding-left: 10px; margin-bottom: 15px;">2.
                     AI導入による削減効果（予測）</h3>
-                <p style="font-size: 14px; margin-bottom: 10px;">AIツールの導入により、当該業務の約70%を自動化・効率化できると仮定した場合の試算結果は以下の通りです。
+                <p style="font-size: 14px; margin-bottom: 10px;">AIツールの導入により、当該業務の約<span id="prop-rate-note">70</span>%を自動化・効率化できると仮定した場合の試算結果は以下の通りです。
                 </p>
 
                 <div style="background-color: #fffaf0; border: 1px solid #ffcc80; padding: 20px; border-radius: 8px;">
@@ -489,19 +753,134 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
+        function submitOnEnter(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                calculateSavings();
+            }
+        }
+
+        function updateReductionRateLabel() {
+            const reductionRateInput = document.getElementById('reduction-rate');
+            const reductionRate = parseInt(reductionRateInput.value, 10);
+            document.getElementById('reduction-rate-label').innerText = reductionRate;
+            document.getElementById('note-reduction-rate').innerText = reductionRate;
+
+            const rateChip = document.getElementById('reduction-rate-chip');
+            const meterFill = document.getElementById('rate-meter-fill');
+            meterFill.style.width = `${reductionRate}%`;
+
+            if (reductionRate <= 45) {
+                rateChip.innerText = '保守';
+                meterFill.style.background = 'linear-gradient(90deg, #b0bec5 0%, #78909c 100%)';
+            } else if (reductionRate <= 60) {
+                rateChip.innerText = '標準';
+                meterFill.style.background = 'linear-gradient(90deg, #ffd180 0%, #ffb74d 100%)';
+            } else {
+                rateChip.innerText = '積極';
+                meterFill.style.background = 'linear-gradient(90deg, #ffb74d 0%, #ff8c00 100%)';
+            }
+        }
+
+        function applyScenario(rate) {
+            document.getElementById('reduction-rate').value = rate;
+            updateReductionRateLabel();
+        }
+
+        function updateShareUrl(minutesPerDay, hourlyWage, daysPerMonth, reductionRatePercent) {
+            const params = new URLSearchParams({
+                mins: String(minutesPerDay),
+                wage: String(hourlyWage),
+                days: String(daysPerMonth),
+                rate: String(reductionRatePercent),
+            });
+            const nextUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.replaceState({}, '', nextUrl);
+        }
+
+        function hydrateFromQuery() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.toString()) return;
+
+            const mins = params.get('mins');
+            const wage = params.get('wage');
+            const days = params.get('days');
+            const rate = params.get('rate');
+
+            if (mins) document.getElementById('hours-per-day').value = mins;
+            if (wage) document.getElementById('hourly-wage').value = wage;
+            if (days) document.getElementById('days-per-month').value = days;
+            if (rate) document.getElementById('reduction-rate').value = rate;
+            updateReductionRateLabel();
+        }
+
+        function resetForm() {
+            document.getElementById('hours-per-day').value = '';
+            document.getElementById('hourly-wage').value = '1600';
+            document.getElementById('days-per-month').value = '20';
+            document.getElementById('reduction-rate').value = '70';
+            updateReductionRateLabel();
+            showErrors([]);
+            document.getElementById('result-box').style.display = 'none';
+            document.getElementById('cta-section').style.display = 'none';
+            window.history.replaceState({}, '', window.location.pathname);
+            window.simData = null;
+        }
+
+        function validateInputs(minutesPerDay, hourlyWage, daysPerMonth) {
+            const errors = [];
+
+            if (Number.isNaN(minutesPerDay)) {
+                errors.push('「1日あたりの作業時間（分）」を入力してください。');
+            } else if (!Number.isInteger(minutesPerDay) || minutesPerDay < 1 || minutesPerDay > 1440) {
+                errors.push('「1日あたりの作業時間」は1〜1440の整数で入力してください。');
+            }
+
+            if (Number.isNaN(hourlyWage)) {
+                errors.push('「時給換算（円）」を入力してください。');
+            } else if (!Number.isInteger(hourlyWage) || hourlyWage < 500 || hourlyWage > 20000) {
+                errors.push('「時給換算」は500〜20,000の整数で入力してください。');
+            }
+
+            if (Number.isNaN(daysPerMonth)) {
+                errors.push('「月間稼働日数」を入力してください。');
+            } else if (!Number.isInteger(daysPerMonth) || daysPerMonth < 1 || daysPerMonth > 31) {
+                errors.push('「月間稼働日数」は1〜31の整数で入力してください。');
+            }
+
+            return errors;
+        }
+
+        function showErrors(errors) {
+            const errorBox = document.getElementById('error-box');
+            if (!errors.length) {
+                errorBox.style.display = 'none';
+                errorBox.innerHTML = '';
+                return;
+            }
+
+            const items = errors.map((err) => `<li>${err}</li>`).join('');
+            errorBox.innerHTML = `<ul>${items}</ul>`;
+            errorBox.style.display = 'block';
+        }
+
         function calculateSavings() {
             // Inputs
             const minutesPerDay = parseFloat(document.getElementById('hours-per-day').value);
             const hourlyWage = parseFloat(document.getElementById('hourly-wage').value);
             const daysPerMonth = parseFloat(document.getElementById('days-per-month').value);
 
-            if (isNaN(minutesPerDay) || isNaN(hourlyWage) || isNaN(daysPerMonth)) {
-                alert("すべての項目に数値を入力してください。");
+            const validationErrors = validateInputs(minutesPerDay, hourlyWage, daysPerMonth);
+            if (validationErrors.length) {
+                showErrors(validationErrors);
                 return;
             }
 
+            showErrors([]);
+
             // Calculation Logic
-            const reductionRate = 0.7; // 70% reduction
+            const reductionRatePercent = parseFloat(document.getElementById('reduction-rate').value);
+            const reductionRate = reductionRatePercent / 100;
 
             const currentMonthlyMinutes = minutesPerDay * daysPerMonth;
             const savedMonthlyMinutes = currentMonthlyMinutes * reductionRate;
@@ -511,6 +890,14 @@
 
             const savedCostMonthly = Math.round((savedMonthlyMinutes / 60) * hourlyWage);
             const savedCostAnnual = savedCostMonthly * 12;
+
+            const baselineReductionRate = 0.7;
+            const baselineSavedMonthlyMinutes = currentMonthlyMinutes * baselineReductionRate;
+            const baselineSavedCostAnnual = Math.round((baselineSavedMonthlyMinutes / 60) * hourlyWage) * 12;
+            const annualDiff = savedCostAnnual - baselineSavedCostAnnual;
+            const hoursDiffMinutes = savedMonthlyMinutes - baselineSavedMonthlyMinutes;
+            const diffHours = Math.floor(Math.abs(hoursDiffMinutes) / 60);
+            const diffMins = Math.round(Math.abs(hoursDiffMinutes) % 60);
 
             // Reward Calculation
             const priceBeer = 600;
@@ -532,10 +919,21 @@
 
             // Set static text
             document.getElementById('saved-hours-display').innerText = `${savedHours}時間 ${savedMinsRemainder}分`;
+            document.getElementById('kpi-hours').innerText = `${savedHours}時間 ${savedMinsRemainder}分`;
+
+            document.getElementById('formula-current').innerText = `月間作業分 = ${minutesPerDay.toLocaleString()}分 × ${daysPerMonth.toLocaleString()}日 = ${Math.round(currentMonthlyMinutes).toLocaleString()}分`;
+            document.getElementById('formula-saved').innerText = `削減分 = ${Math.round(currentMonthlyMinutes).toLocaleString()}分 × ${reductionRatePercent}% = ${Math.round(savedMonthlyMinutes).toLocaleString()}分`;
+            document.getElementById('formula-cost').innerText = `金額換算 = ${(savedMonthlyMinutes / 60).toFixed(1)}時間 × ${hourlyWage.toLocaleString()}円 = ${savedCostMonthly.toLocaleString()}円`;
+            document.getElementById('note-reduction-rate').innerText = reductionRatePercent;
+            document.getElementById('impact-message').innerText = `この条件なら、毎月 ${savedHours}時間 ${savedMinsRemainder}分 を削減できる見込みです。`;
+            document.getElementById('compare-annual').innerText = `${annualDiff >= 0 ? '+' : '-'}${Math.abs(annualDiff).toLocaleString()} 円`;
+            document.getElementById('compare-hours').innerText = `${hoursDiffMinutes >= 0 ? '+' : '-'}${diffHours}時間 ${diffMins}分`;
 
             // Animate Numbers
             animateValue("saved-cost", 0, savedCostMonthly, 1000);
             animateValue("annual-savings", 0, savedCostAnnual, 1200);
+            animateValue("kpi-monthly", 0, savedCostMonthly, 1000);
+            animateValue("kpi-annual", 0, savedCostAnnual, 1200);
 
             animateValue("reward-beer", 0, countBeer, 1500);
             animateValue("reward-frontale", 0, countFrontale, 1500);
@@ -547,10 +945,13 @@
                 mins: minutesPerDay,
                 days: daysPerMonth,
                 wage: hourlyWage.toLocaleString(),
+                reductionRate: reductionRatePercent,
                 savedHoursText: `${savedHours}時間 ${savedMinsRemainder}分`,
                 savedCostMonthly: savedCostMonthly.toLocaleString(),
                 savedCostAnnual: savedCostAnnual.toLocaleString()
             };
+
+            updateShareUrl(minutesPerDay, hourlyWage, daysPerMonth, reductionRatePercent);
         }
 
         function animateValue(id, start, end, duration) {
@@ -602,6 +1003,8 @@
             document.getElementById('prop-mins').innerText = window.simData.mins;
             document.getElementById('prop-days').innerText = window.simData.days;
             document.getElementById('prop-wage').innerText = window.simData.wage;
+            document.getElementById('prop-reduction-rate').innerText = window.simData.reductionRate;
+            document.getElementById('prop-rate-note').innerText = window.simData.reductionRate;
             document.getElementById('prop-saved-hours').innerText = window.simData.savedHoursText;
             document.getElementById('prop-saved-cost-monthly').innerText = window.simData.savedCostMonthly;
             document.getElementById('prop-saved-cost-annual').innerText = window.simData.savedCostAnnual;
@@ -638,6 +1041,9 @@
                 alert("PDF生成に失敗しました。");
             }
         }
+
+        hydrateFromQuery();
+        updateReductionRateLabel();
     </script>
 
 </html>
